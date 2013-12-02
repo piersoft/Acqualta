@@ -4,6 +4,7 @@
 //
 //  Created by Andrea Busi on 17/05/10.
 //  Copyright 2010 BubiDevs. All rights reserved.
+//  Modifiche a cura di Francesco Piero Paolicelli
 //
 
 #import "ViewArticolo.h"
