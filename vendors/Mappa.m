@@ -8,7 +8,7 @@
 
 #import "MyAnnotation.h"
 #import "UserProfileVC.h"
-#import	"MappaAPI.h"
+#import	"Mappa.h"
 #import "shopPoint.h"
 #import "ViewArticolo.h"
 #import "asyncimageview.h"
@@ -19,11 +19,11 @@
 
 
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
-@implementation MappaAPI
+@implementation Mappa
 
 //@synthesize window=_window;
 @synthesize mapView,userProfileVC;
-@synthesize segmentposizione,cmdMiaPosizione,indirizzoshare,feed,feedsubtit,feedlat,feedlon,titlemap,toolbar,barra,linkdapassare,overlay,tracks;
+@synthesize segmentposizione,cmdMiaPosizione,indirizzoshare,feed,feedsubtit,feedlat,feedlon,titlemap,toolbar,barra,linkdapassare,overlay;
 
 @synthesize lineColor, origine, destinazione;
 
@@ -660,87 +660,10 @@
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     [self performSelector:@selector(timeout:) withObject:nil afterDelay:45];
     
+    mytimer = [NSTimer scheduledTimerWithTimeInterval:0.6 target:self selector:@selector(inizio) userInfo:nil repeats:NO];
     
-
-  //  tracks =[[NSDictionary alloc] init];
-    shopPoints = [[NSMutableArray alloc] init];
-	shopPoint *myAnnotation;
     
-  //  NSLog(@"tracks %@",self.tracks);
-	
-    NSArray *monday = tracks[@"data"];
-    for ( NSDictionary *jj in monday )
-    {/*
-        
-        NSMutableArray* annotations=[[NSMutableArray alloc] init];
-        
-        CLLocationCoordinate2D theCoordinate1;
-        theCoordinate1.latitude = [jj[@"latitude"] floatValue];
-
-        theCoordinate1.longitude = [jj[@"longitude"]floatValue];
-        
-        MyAnnotation* myAnnotation1=[[MyAnnotation alloc] init];
-        
-        myAnnotation1.coordinate=theCoordinate1;
-        myAnnotation1.title=jj[@"location"];
-        myAnnotation1.subtitle=jj[@"alias"];
-*/
-       
-        
-        NSString *title=jj[@"location"];
-
-        NSLog (@"location =%@",title);
-        
-        
-        NSString *idsens =jj[@"alias"];
-        idsens=[NSString stringWithFormat:@"ID: %@",idsens];
-       NSLog (@"alias =%@",idsens);
-        NSString *checklat=jj[@"latitude"];
-        NSLog (@"chcklat =%@",checklat);
-        NSString *checklng=jj[@"longitude"];
-            NSLog (@"chcklnd =%@",checklng);
-      //  checklat=[checklat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        if ([checklng intValue] == 0) {
-            if ([title isEqualToString:@"Ruga Due Pozzi"]){
-                checklat=@"45.44146";
-                checklng=@"12.33633";
-            }
-            if ([title isEqualToString:@"Ognissanti"]){
-                checklat=@"45.43008";
-                checklng=@"12.32591";
-            }
-        }
-       
-        // if (checklat !=@"0") {
-		myAnnotation = [[[shopPoint alloc] init] autorelease];
-        
-        
-        myAnnotation.latitude = [checklat floatValue];
-        
-        myAnnotation.longitude = [checklng floatValue];
-        
-        myAnnotation.title = [title
-                              copy] ;
     
-      //  NSLog(@"myAnnotation.title %@",myAnnotation.title);
-        myAnnotation.subtitle =[idsens
-                                copy] ;
-        
-      
-        
-        [shopPoints addObject:myAnnotation];
-    //    NSLog(@"my annotation %@",shopPoints);
-        
-        [mapView addAnnotations:shopPoints];
-
-    
-  //  mytimer = [NSTimer scheduledTimerWithTimeInterval:0.6 target:self selector:@selector(inizio) userInfo:nil repeats:NO];
-    
-   }
-    
-   //   NSLog(@"mapview annotations %@  ",mapView.annotations);
-    [self performSelector:@selector(timeout:) withObject:nil afterDelay:0];
-    mytimer = [NSTimer scheduledTimerWithTimeInterval:.5 target:self selector:@selector(zoom) userInfo:nil repeats:NO];
 }
 
 
@@ -1085,9 +1008,9 @@
     [overlay release];
     [mapView release];
     
-    // [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
     
-    [self.navigationController popViewControllerAnimated:YES];
+  //  [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)inizio1{
@@ -1128,7 +1051,38 @@
         
         // [self performSelector:@selector(timeout:) withObject:nil afterDelay:0];
         
-      
+        item = [[NSMutableDictionary alloc] init];
+        elencoFeed = [[NSMutableArray alloc] init];
+		/*
+         currentTitle = [[NSMutableString alloc] init];
+         currentCategory = [[NSMutableString alloc] init];
+         currentSummary = [[NSMutableString alloc] init];
+         currentLink = [[NSMutableString alloc] init];
+         currentImage = [[NSMutableString alloc] init];
+         currentLat= [[NSMutableString alloc] init];
+         currentLong= [[NSMutableString alloc] init];
+         currentCheck =[[NSMutableString alloc] init];
+         */
+        
+        
+        //     NSString *img=[prefs valueForKey:@"image"];
+        //     NSString *subt=[prefs valueForKey:@"subtitle"];
+        [item setObject:feed forKey:@"title"];
+		[item setObject:linkdapassare forKey:@"link"];
+        //    	[item setObject:@"" forKey:@"link"];
+		[item setObject:@"" forKey:@"summary"];
+		[item setObject:@"" forKey:@"check"];
+        
+        [item setObject:feedlon forKey:@"longitudine"];
+		[item setObject:feedlat forKey:@"latitudine"];
+        [item setObject:feedsubtit forKey:@"category"];
+        
+        
+        
+        
+        
+        [elencoFeed addObject:[item copy]];
+        
         //    NSLog(@"elenco feed singolo PIN %@",elencoFeed);
         
         //    destinazione = [[Place alloc] init];
@@ -1136,7 +1090,7 @@
         shopPoint *myAnnotation;
         
         
-        NSString *idsensore=[[elencoFeed objectAtIndex:0] objectForKey:@"www"];
+   //     NSString *idsensore=[[elencoFeed objectAtIndex:0] objectForKey:@"www"];
         NSString *title=[[elencoFeed objectAtIndex:0] objectForKey:@"title"];
         
         title= [title stringByReplacingOccurrencesOfString:@"\n" withString:@""];
@@ -1150,17 +1104,33 @@
         check=[check stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         NSString *subtitle=[[elencoFeed objectAtIndex:0] objectForKey:@"category"];
         subtitle=[subtitle stringByReplacingOccurrencesOfRegex:@"\n" withString:@""];
-        
+        subtitle=[NSString stringWithFormat:@"Ultimo livello: %@",subtitle];
         NSString *image =[[elencoFeed objectAtIndex:0] objectForKey:@"image"];
         
         image=[image stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         //image=[image stringByReplacingOccurrencesOfString:@".jpg" withString:@"-150x150.jpg"];
         
 		myAnnotation = [[[shopPoint alloc] init] autorelease];
+        
+        if ([[[elencoFeed objectAtIndex:0] objectForKey:@"latitudine"] intValue] == 0) {
+            if ([title isEqualToString:@"Ruga Due Pozzi"]){
+             
+                myAnnotation.latitude =[@"45.44146" floatValue];;
+                
+                myAnnotation.longitude = [@"12.33633" floatValue];;
+                
+            }
+            if ([title isEqualToString:@"Ognissanti"]){
+                
+                myAnnotation.latitude = [@"45.43008" floatValue];;
+                myAnnotation.longitude = [@"12.32591" floatValue];;
+                
+            }
+        }else{
         myAnnotation.latitude = [[[elencoFeed objectAtIndex:0] objectForKey:@"latitudine"] floatValue];
         
         myAnnotation.longitude = [[[elencoFeed objectAtIndex:0] objectForKey:@"longitudine"] floatValue];
-        
+        }
         myAnnotation.title = [title
                               copy] ;
         
@@ -1175,8 +1145,8 @@
                             copy] ;
         
         //  if ([idsensore rangeOfString:@"nessuna"].length == 0) {
-        myAnnotation.subtitle =[idsensore
-                                copy] ;
+       // myAnnotation.subtitle =[idsensore
+                   //             copy] ;
         
         // }
         
@@ -1581,7 +1551,7 @@
         //     NSLog(@"annotation title %@",annotation.title);
         
         //   int i=0;
-      //  if([annotation.title isEqualToString:title] ){
+        if([annotation.title isEqualToString:title] ){
             destinazione.latitude = [[[elencoFeed objectAtIndex:i] objectForKey:@"latitudine"] floatValue];
             destinazione.longitude = [[[elencoFeed objectAtIndex:i] objectForKey:@"longitudine"] floatValue];
             destinazione.name = annotation.title;
@@ -1605,11 +1575,11 @@
             
             CGSize maxSize = CGRectInset(self.view.bounds,
                                          
-                                         [MappaAPI annotationPadding],
+                                         [Mappa annotationPadding],
                                          
-                                         [MappaAPI annotationPadding]).size;
+                                         [Mappa annotationPadding]).size;
             
-            maxSize.height -= self.navigationController.navigationBar.frame.size.height + [MappaAPI calloutHeight];
+            maxSize.height -= self.navigationController.navigationBar.frame.size.height + [Mappa calloutHeight];
             
             if (resizeRect.size.width > maxSize.width)
                 
@@ -1646,7 +1616,7 @@
             
         }
         
-    //}
+    }
     
     
     //       NSLog(@"image link =%@",testo);
@@ -1906,8 +1876,6 @@ static NSString* const ANNOTATION_SELECTED_DESELECTED = @"mapAnnotationSelectedO
     
     
 }
-
-
 
 
 

@@ -517,25 +517,15 @@
     
  //   NSString *CellIdentifier = [[elencoFeed objectAtIndex:indexPath.row] objectForKey:@"id"];
 	
+    NSArray *monday = tracks[@"data"];
     NSDictionary *item1;
     NSString *CellIdentifier;
     
     
- 
-     if (tableView == self.searchDisplayController.searchResultsTableView){
     
-
-        item1 = [[NSDictionary alloc] initWithDictionary:[filteredListItems objectAtIndex:indexPath.row]];
-        //   CellIdentifier = [[filteredListItems objectAtIndex:indexPath.row] objectForKey:@"id"];
-        CellIdentifier = [item1 objectForKey:@"luogo"];
-        NSLog(@"sono nella tableview filtrata da cliccare");
-       
-    }else {
-        item1 = [[NSDictionary alloc] initWithDictionary:[elencoFeed objectAtIndex:indexPath.row]];
-         NSLog(@"sono nella tableview non filtrata da cliccare");
-        CellIdentifier = [item1 objectForKey:@"luogo"];
-        //  CellIdentifier = [[elencoFeed objectAtIndex:indexPath.row] objectForKey:@"id"];
-    }
+    item1 = [[NSDictionary alloc] initWithDictionary:[monday objectAtIndex:indexPath.row]];
+    CellIdentifier = [NSString stringWithFormat:@"%@",item1[@"id"]];
+    
 	
 	UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
 	
@@ -585,57 +575,24 @@
     NSLog(@"self title %@",self.title);
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if ([self.title isEqualToString:@"News"]) {
-        
- 
-   	       NSString *titolo1 = [item1 objectForKey:@"luogo"];
-         NSString *numscheda = [item1 objectForKey:@"link"];
-   
-      numscheda =[numscheda stringByReplacingOccurrencesOfRegex:@"%0A" withString:@""];
-                
-     numscheda=[  numscheda stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
-    NSLog(@"Link da passare %@",numscheda);
-        
-    if (IS_IPAD)
-    {
-        ViewArticolo *controller = [[ViewArticolo alloc] initWithNibName:@"Articoloipad" bundle:nil];
-        if ([self.title isEqualToString:@"Aziende"]) {
-            controller.buttonoff=@"0";
-        }
-        controller.indirizzo = numscheda;
-        controller.lat=[item1 objectForKey:@"lat"];
-        controller.longi=[item1 objectForKey:@"long"];
-        controller.www=[item1 objectForKey:@"www"];
-       controller.emailaz=[item1 objectForKey:@"email"];
- NSLog(@"website e email %@ %@",controller.www,controller.emailaz);
-controller.phone=[item1 objectForKey:@"phone"];
-        controller.titolotext=titolo1;
-         controller.indirizzoazienda=[item1 objectForKey:@"indirizzo"];
-        controller.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-          [self presentViewController:controller animated:YES completion:nil];
-     
-    }else{
-        
-        ViewArticolo *controller = [[ViewArticolo alloc] initWithNibName:@"Articoloiphone" bundle:nil];
-        controller.indirizzo = numscheda;
-        controller.lat=[item1 objectForKey:@"lat"];
-        controller.longi=[item1 objectForKey:@"long"];
-        if ([self.title isEqualToString:@"Aziende"]) {
-            controller.buttonoff=@"0";
-        }
-        controller.www=[item1 objectForKey:@"www"];
-        controller.emailaz=[item1 objectForKey:@"email"];
-      NSLog(@"website e email %@ %@",controller.www,controller.emailaz);
-        controller.indirizzoazienda=[item1 objectForKey:@"indirizzo"];
-        controller.phone=[item1 objectForKey:@"phone"];
-        controller.titolotext=titolo1;
-        controller.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-        
-          [self presentViewController:controller animated:YES completion:nil];
-    }
-       }
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    [prefs setObject:@"1" forKey:@"scheda"];
+    
+    NSLog(@"apro singola scheda in mappa");
+    
+    Mappa *controller = [[Mappa alloc] initWithNibName:@"Mappa" bundle:nil];
+    controller.feedlat=item1[@"latitude"];
+    controller.feedlon=item1[@"longitude"];
+    controller.feed=item1[@"location"];
+    controller.linkdapassare=@"";
+    controller.feedsubtit=[NSString stringWithFormat:@"%@", item1[@"level"]];
+    controller.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
    
+  //  [self.navigationController pushViewController:   controller animated:YES];
+  //  [controller release];
+   [self presentViewController:controller animated:YES completion:nil];
 }
 
 
