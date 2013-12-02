@@ -1,6 +1,6 @@
 //
 //  ViewController.m
-//  ASI Brindisi
+//  Acqualta
 //
 //  Created by Francesco Piero Paolicelli on 10/11/13.
 //  Copyright (c) 2013 Francesco Piero Paolicelli. All rights reserved.
@@ -8,9 +8,10 @@
 
 #import "ViewController.h"
 #import "RootViewController_s.h"
-#import "MappaMatera.h"
+#import "Mappa.h"
 #import "ViewArticolo.h"
 #import "Appirater.h"
+#import "MappaAPI.h"
 
 @interface ViewController ()
 @property (nonatomic, strong) UIDynamicAnimator *animator;
@@ -29,16 +30,16 @@
         [self livelli];
     }
     /*
-    if (IS_IPAD) {
-        int t=0;
-        if ([[[UIDevice currentDevice] systemVersion] floatValue] < 7.0) t=-20;
-
-        sfondo.frame=CGRectMake(0, t, 768, 1024);
-        sfondo.image=[UIImage imageNamed:@"ipadneutro.png"];
-        aziende.frame=CGRectMake(0, 400, 400, 50);
-        
-    }   
-*/
+     if (IS_IPAD) {
+     int t=0;
+     if ([[[UIDevice currentDevice] systemVersion] floatValue] < 7.0) t=-20;
+     
+     sfondo.frame=CGRectMake(0, t, 768, 1024);
+     sfondo.image=[UIImage imageNamed:@"ipadneutro.png"];
+     aziende.frame=CGRectMake(0, 400, 400, 50);
+     
+     }
+     */
 }
 -(void)viewDidAppear:(BOOL)animated{
     if ([[[UIDevice currentDevice] systemVersion] floatValue] < 7.0) {
@@ -52,47 +53,47 @@
     
     [Appirater appLaunched:YES];
     
-     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
-   
-         if (IS_IPAD) {
-              [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(animazione) userInfo:nil repeats:NO];
-         }else  [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(animazione) userInfo:nil repeats:NO];
-    self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
-    
-    self.gravityBeahvior = [[UIGravityBehavior alloc] initWithItems:nil];
-    
-    self.collisionBehavior = [[UICollisionBehavior alloc] initWithItems:nil];
-    self.collisionBehavior.translatesReferenceBoundsIntoBoundary = YES;
-    
-    self.itemBehavior = [[UIDynamicItemBehavior alloc] initWithItems:nil];
-    self.itemBehavior.elasticity = 0.6;
-    self.itemBehavior.friction = 0.5;
-    self.itemBehavior.resistance = 0.5;
-    
-    
-    [self.animator addBehavior:self.gravityBeahvior];
-    [self.animator addBehavior:self.collisionBehavior];
-    [self.animator addBehavior:self.itemBehavior];
-     }else{
-         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-         NSString *view=[prefs objectForKey:@"phone"];
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
         
-         if ([view isEqualToString:@"iPhoneRetina"]) {
-             self.view.frame=CGRectMake(0, 20, 320, 460);
-         }
-         UIImageView *banner=[[UIImageView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-70, 320, 70)];
-         
+        if (IS_IPAD) {
+            [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(animazione) userInfo:nil repeats:NO];
+        }else  [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(animazione) userInfo:nil repeats:NO];
+        self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
         
-         banner.image=[UIImage imageNamed:@"acqualtabanneriphone.png"];
-         if (IS_IPAD){
-             banner.image=[UIImage imageNamed:@"acqualtabanner.png"];
-             banner.frame=CGRectMake(0, self.view.frame.size.height-70, 768,70);
-
-         }
-         NSLog(@"banner");
-         [self.view addSubview:banner];
-         
-     }
+        self.gravityBeahvior = [[UIGravityBehavior alloc] initWithItems:nil];
+        
+        self.collisionBehavior = [[UICollisionBehavior alloc] initWithItems:nil];
+        self.collisionBehavior.translatesReferenceBoundsIntoBoundary = YES;
+        
+        self.itemBehavior = [[UIDynamicItemBehavior alloc] initWithItems:nil];
+        self.itemBehavior.elasticity = 0.6;
+        self.itemBehavior.friction = 0.5;
+        self.itemBehavior.resistance = 0.5;
+        
+        
+        [self.animator addBehavior:self.gravityBeahvior];
+        [self.animator addBehavior:self.collisionBehavior];
+        [self.animator addBehavior:self.itemBehavior];
+    }else{
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        NSString *view=[prefs objectForKey:@"phone"];
+        
+        if ([view isEqualToString:@"iPhoneRetina"]) {
+            self.view.frame=CGRectMake(0, 20, 320, 460);
+        }
+        UIImageView *banner=[[UIImageView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-70, 320, 70)];
+        
+        
+        banner.image=[UIImage imageNamed:@"acqualtabanneriphone.png"];
+        if (IS_IPAD){
+            banner.image=[UIImage imageNamed:@"acqualtabanner.png"];
+            banner.frame=CGRectMake(0, self.view.frame.size.height-70, 768,70);
+            
+        }
+        NSLog(@"banner");
+        [self.view addSubview:banner];
+        
+    }
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
 }
@@ -136,13 +137,13 @@
         
         controller.titolotext=@"Il sensore";
         
-          controller.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+        controller.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
         
         
-       // [self.navigationController pushViewController:controller animated:YES];
-       // [controller release];
+        // [self.navigationController pushViewController:controller animated:YES];
+        // [controller release];
         
-         [self presentViewController:controller animated:YES completion:nil];
+        [self presentViewController:controller animated:YES completion:nil];
         
     }else{
         
@@ -153,14 +154,14 @@
         
         controller.titolotext=@"Il sensore";
         
-          controller.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+        controller.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
         
-           [self presentViewController:controller animated:YES completion:nil];
-       // [self.navigationController pushViewController:controller animated:YES];
-       // [controller release];
+        [self presentViewController:controller animated:YES completion:nil];
+        // [self.navigationController pushViewController:controller animated:YES];
+        // [controller release];
         
     }
-
+    
     
 }
 -(IBAction)bandi{
@@ -174,9 +175,32 @@
 }
 -(IBAction)mappa{
     
-    MappaMatera *photoView = [[MappaMatera alloc] initWithNibName:@"MappaMatera" bundle:nil];
+    NSData *data = [[NSData alloc] initWithContentsOfURL:
+                    [NSURL URLWithString:@"http://paolomainardi.com:3050/api/devices/"]];
+    NSError *jsonError = nil;
+    NSJSONSerialization *jsonResponse = [NSJSONSerialization
+                                         JSONObjectWithData:data
+                                         options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves
+                                         error:&jsonError];
+    
+    //    [self performSelector:@selector(timeout:) withObject:nil afterDelay:0];
+    
+    MappaAPI *trackListVC;
+    trackListVC = [[MappaAPI alloc]
+                   initWithNibName:@"MappaAPI"
+                   bundle:nil];
+    trackListVC.tracks = (NSDictionary *)jsonResponse ;
+    NSLog(@"tracks in viewcontroller %@",[trackListVC.tracks objectForKey:@"data"]);
+    [self.navigationController pushViewController:trackListVC animated:YES];
+    [trackListVC release];
+    
+    
+}
+-(IBAction)mappa_old{
+    
+    Mappa *photoView = [[Mappa alloc] initWithNibName:@"Mappa" bundle:nil];
     photoView.feed=@"http://www.imatera.info/Acqualta/acqualta.xml";
-   // [self presentViewController:photoView animated:YES completion:nil];
+    // [self presentViewController:photoView animated:YES completion:nil];
     [self.navigationController pushViewController:photoView animated:YES];
     [photoView release];
 }
@@ -215,32 +239,32 @@
         
         [self.navigationController pushViewController:controller animated:YES];
         [controller release];
-    
+        
     }
-
+    
 }
 
 -(IBAction)credits{
     
-  //  self.navigationController.navigationBarHidden=NO;
-  
+    //  self.navigationController.navigationBarHidden=NO;
+    
     if (IS_IPAD)
     {
         
         ViewArticolo *controller = [[ViewArticolo alloc] initWithNibName:@"Articoloipad" bundle:nil];
-       
+        
         controller.indirizzo = @"http://www.acqualta.org/about";
         
         
         controller.titolotext=@"About";
         
-      //  controller.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+        //  controller.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
         
-     
+        
         [self.navigationController pushViewController:controller animated:YES];
         [controller release];
         
-      // [self presentViewController:controller animated:YES completion:nil];
+        // [self presentViewController:controller animated:YES completion:nil];
         
     }else{
         
@@ -257,7 +281,7 @@
         [self.navigationController pushViewController:controller animated:YES];
         [controller release];    }
     
-
+    
 }
 
 -(IBAction)tweets{
