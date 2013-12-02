@@ -134,15 +134,6 @@
 
 - (IBAction)visualizzaMiaPosizione:(id)sender;
 - (IBAction)mostraTipoMappa:(id)sender;
-- (IBAction)mostraTipoPin:(id)sender;
-
-//-(IBAction)info;
-
-//-(IBAction) displayAR:(id) sender;
-
-//@property (nonatomic, retain) ARViewController *cameraViewController;
-//@property (nonatomic, retain) UIViewController *infoViewController;
-
 
 -(NSMutableArray *)decodePolyLine: (NSMutableString *)encoded;
 -(void) updateRouteView;

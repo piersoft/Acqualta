@@ -700,7 +700,7 @@
         NSString *checklng=jj[@"longitude"];
             NSLog (@"chcklnd =%@",checklng);
       //  checklat=[checklat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        if ([checklng intValue] == 0) {
+        if ([checklng intValue] == 1) {
             if ([title isEqualToString:@"Ruga Due Pozzi"]){
                 checklat=@"45.44146";
                 checklng=@"12.33633";
@@ -1907,14 +1907,7 @@ static NSString* const ANNOTATION_SELECTED_DESELECTED = @"mapAnnotationSelectedO
     
 }
 
--(IBAction)reload{
-    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    _hud.labelText = @"";
-    
-    
-    mytimer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(reloadall) userInfo:nil repeats:NO];
-    
-}
+
 
 
 
