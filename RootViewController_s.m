@@ -896,7 +896,7 @@
     
    // image1=[NSString stringWithFormat:@"%@ cm.",image1];
    
-    int minThreshold = [image1 intValue];
+    int minThreshold = [image1 intValue]+50;
     float stringFloat = [image1 floatValue];
     double myDecimal = stringFloat - minThreshold;
     if(myDecimal < 0.50)
@@ -958,7 +958,7 @@
         
         if (![self.title isEqualToString:@"News"]) {
         UIWebView *gifview =[[UIWebView alloc]initWithFrame:frame];
-        NSString *imageFileName = @"sea1";
+        NSString *imageFileName = @"sea1b";
         NSString *imageFileExtension = @"gif";
         
         // load the path of the image in the main bundle (this gets the full local path to the image you need, including if it is localized and if you have a @2x version)
@@ -991,16 +991,16 @@
     
     if ((minThreshold >=80) && (minThreshold <=109)) {
         titleLabel1.textColor=[UIColor yellowColor];
-        cellBackground1 = [UIImage imageNamed:@"sea2.jpg"];
+        cellBackground1 = [UIImage imageNamed:@"sea2b.jpg"];
     }
     
     if ((minThreshold >=110) && (minThreshold <=139)) {
         titleLabel1.textColor=[UIColor orangeColor];
-        cellBackground1 = [UIImage imageNamed:@"sea3.jpg"];
+        cellBackground1 = [UIImage imageNamed:@"sea3b.jpg"];
     }
-        if ((minThreshold >=110)&& (minThreshold <=139)) {
+        if ((minThreshold >=110)&& (minThreshold <=189)) {
         titleLabel1.textColor=[UIColor redColor];
-        cellBackground1 = [UIImage imageNamed:@"sea4.jpg"];
+        cellBackground1 = [UIImage imageNamed:@"sea4b.jpg"];
     }
     
     
@@ -1106,7 +1106,7 @@
     
 	NSString *titolo1 = [item1 objectForKey:@"luogo"];
 	
-	
+	titolo1=[titolo1 stringByReplacingOccurrencesOfString:@"rugadopozzi" withString:@"Ruga Due Pozzi"];
 	UILabel *subtitleLabel = (UILabel *)[cell viewWithTag:1];
   
 	subtitleLabel.text = [titolo1 uppercaseString] ;

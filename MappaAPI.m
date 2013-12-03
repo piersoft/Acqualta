@@ -692,11 +692,11 @@
         NSLog (@"location =%@",title);
         
         
-        NSString *idsens =jj[@"alias"];
-        idsens=[NSString stringWithFormat:@"ID: %@",idsens];
+        NSString *idsens =jj[@"id"];
+      //  idsens=[NSString stringWithFormat:@"ID: %@",idsens];
        NSLog (@"alias =%@",idsens);
         NSString *checklat=jj[@"latitude"];
-        NSLog (@"chcklat =%@",checklat);
+     //   NSLog (@"chcklat =%@",checklat);
         NSString *checklng=jj[@"longitude"];
             NSLog (@"chcklnd =%@",checklng);
       //  checklat=[checklat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -721,12 +721,32 @@
         
         myAnnotation.title = [title
                               copy] ;
-    
-      //  NSLog(@"myAnnotation.title %@",myAnnotation.title);
-        myAnnotation.subtitle =[idsens
-                                copy] ;
+        NSString *jsoni=[NSString stringWithFormat:@"http://paolomainardi.com:3050/api/data/%@?limit=1&offset=0",idsens];
+         NSLog(@"jsonio %@",jsoni);
+        NSData *data = [[NSData alloc] initWithContentsOfURL:
+                        [NSURL URLWithString:jsoni]];
+        NSError *jsonError = nil;
+        NSJSONSerialization *jsonResponse = [NSJSONSerialization
+                                             JSONObjectWithData:data
+                                             options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves
+                                             error:&jsonError];
+
+       
+        NSDictionary *jinc=(NSDictionary *)jsonResponse;
+        NSArray *monday = jinc[@"data"];
+        NSLog(@"monday %@",monday);
+        if (![monday count]) {
+            myAnnotation.subtitle =[[NSString stringWithFormat:@"Ultimo livello: %@",@"non pervenuto"]
+                                    copy];
+        }else{
+        NSDictionary *item1=[[NSDictionary alloc] initWithDictionary:[monday objectAtIndex:0]];
+        NSLog(@"item1 level %d",[item1[@"level"] intValue]);
+        int livello= [item1[@"level"] intValue];
         
-      
+        myAnnotation.subtitle =[[NSString stringWithFormat:@"Ultimo livello: %d",livello]
+                                copy];
+        
+        }
         
         [shopPoints addObject:myAnnotation];
     //    NSLog(@"my annotation %@",shopPoints);
@@ -737,6 +757,8 @@
   //  mytimer = [NSTimer scheduledTimerWithTimeInterval:0.6 target:self selector:@selector(inizio) userInfo:nil repeats:NO];
     
    }
+    
+   
     
    //   NSLog(@"mapview annotations %@  ",mapView.annotations);
     [self performSelector:@selector(timeout:) withObject:nil afterDelay:0];

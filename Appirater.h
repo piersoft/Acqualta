@@ -55,7 +55,7 @@ extern NSString * const AppiraterUserDidDeclineNotification;
 /*
  Place your Apple generated software id here.
  */
-#define APPIRATER_APP_ID				INSERIRE APP_ID
+#define APPIRATER_APP_ID				111111111
 
 /*
  Your app's name.

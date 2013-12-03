@@ -117,26 +117,48 @@
     [self.itemBehavior addItem:imageView];
 }
 
-
--(IBAction)livelli{
+-(IBAction)proveJSON{
+    NSData *data = [[NSData alloc] initWithContentsOfURL:
+                    [NSURL URLWithString:@"http://acqualta.cartodb.com/api/v2/viz/4633d396-5834-11e3-af15-0719a28de9e2/viz.json"]];
+    NSError *jsonError = nil;
+    NSDictionary *jsonResponse = [NSJSONSerialization
+                                         JSONObjectWithData:data
+                                         options:0|1|2
+                                         error:&jsonError];
   
-NSData *data = [[NSData alloc] initWithContentsOfURL:
-                [NSURL URLWithString:@"http://paolomainardi.com:3050/api/data?limit=10"]];
-NSError *jsonError = nil;
-NSJSONSerialization *jsonResponse = [NSJSONSerialization
-                                     JSONObjectWithData:data
-                                     options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves
-                                     error:&jsonError];
-
-
-RootViewController_j *trackListVC;
-trackListVC = [[RootViewController_j alloc]
-               initWithNibName:@"RootViewController_j"
-               bundle:nil];
+    
+  NSLog(@"json %@",jsonResponse);
+    NSLog(@"json error %@",jsonError);
+    
+    
+    
+   
+}
+-(void)livelliapri{
+    NSData *data = [[NSData alloc] initWithContentsOfURL:
+                    [NSURL URLWithString:@"http://paolomainardi.com:3050/api/data?limit=10"]];
+    NSError *jsonError = nil;
+    NSJSONSerialization *jsonResponse = [NSJSONSerialization
+                                         JSONObjectWithData:data
+                                         options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves
+                                         error:&jsonError];
+    
+    
+    RootViewController_j *trackListVC;
+    trackListVC = [[RootViewController_j alloc]
+                   initWithNibName:@"RootViewController_j"
+                   bundle:nil];
     trackListVC.title=@"Livelli";
-trackListVC.tracks = (NSDictionary *)jsonResponse ;
+    trackListVC.tracks = (NSDictionary *)jsonResponse ;
     [self presentViewController:trackListVC animated:YES completion:nil];
     
+}
+-(IBAction)livelli{
+    
+    [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(livelliapri) userInfo:nil repeats:NO];
+
+  
+ 
 
 }
 
@@ -198,7 +220,8 @@ trackListVC.tracks = (NSDictionary *)jsonResponse ;
     [self presentViewController:photoView animated:YES completion:nil];
     
 }
--(IBAction)mappa{
+
+-(void)mappapri{
     
     NSData *data = [[NSData alloc] initWithContentsOfURL:
                     [NSURL URLWithString:@"http://paolomainardi.com:3050/api/devices/"]];
@@ -215,10 +238,16 @@ trackListVC.tracks = (NSDictionary *)jsonResponse ;
                    initWithNibName:@"MappaAPI"
                    bundle:nil];
     trackListVC.tracks = (NSDictionary *)jsonResponse ;
-  //  NSLog(@"tracks in viewcontroller %@",[trackListVC.tracks objectForKey:@"data"]);
+    //  NSLog(@"tracks in viewcontroller %@",[trackListVC.tracks objectForKey:@"data"]);
     [self.navigationController pushViewController:trackListVC animated:YES];
     [trackListVC release];
     
+
+}
+-(IBAction)mappa{
+    
+    [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(mappapri) userInfo:nil repeats:NO];
+
     
 }
 -(IBAction)mappa_old{

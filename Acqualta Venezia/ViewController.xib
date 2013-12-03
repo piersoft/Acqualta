@@ -104,6 +104,6 @@
     </objects>
     <resources>
         <image name="button.png" width="308" height="115"/>
-        <image name="sfondo_acqualta.png" width="319" height="568"/>
+        <image name="sfondo_acqualta.png" width="320" height="568"/>
     </resources>
 </document>

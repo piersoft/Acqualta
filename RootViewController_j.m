@@ -345,6 +345,7 @@
 	
    
     NSString *link = item1[@"date_sent"];
+    /*
 	link = [link stringByReplacingOccurrencesOfString:@"PDT" withString:@""];
 	link = [link stringByReplacingOccurrencesOfString:@"GMT" withString:@""];
 	link = [link stringByReplacingOccurrencesOfString:@"+0000" withString:@""];
@@ -367,12 +368,42 @@
 	link = [link stringByReplacingOccurrencesOfString:@"Oct" withString:@"Ottobre"];
 	link = [link stringByReplacingOccurrencesOfString:@"Nov" withString:@"Novembre"];
 	link = [link stringByReplacingOccurrencesOfString:@"Dec" withString:@"Dicembre"];
+     */
+   // link = [link stringByReplacingOccurrencesOfString:@"T" withString:@" "];
+    link = [link stringByReplacingOccurrencesOfString:@"Z" withString:@""];
+    link = [link stringByReplacingOccurrencesOfString:@".000" withString:@""];
     UILabel *dateLabel = (UILabel *)[cell viewWithTag:3];
     
-    dateLabel.text = link;
-    
-    
    
+  
+  //  NSLog(@"date orig %@",link);
+    NSString *date = link;
+    
+    NSDateFormatter *dateFormatter1 = [[NSDateFormatter alloc] init];
+    [dateFormatter1 setDateFormat : @"YYYY-MM-DD'T'hh:mm:ss"];
+
+   [dateFormatter1 setTimeZone:[NSTimeZone timeZoneWithName:@"Rome"]];
+    NSDate *AppointmentDate = [dateFormatter1 dateFromString:date];
+   // [dateFormatter1 setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:3600*2]];
+    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    
+    NSDateComponents *components = [[NSDateComponents alloc] init];
+    components.month = -2;
+    components.year =1;
+    
+    NSDate *nextMonth = [gregorian dateByAddingComponents:components toDate:AppointmentDate options:0];
+    [components release];
+    
+  //  NSDateComponents *nextMonthComponents = [gregorian components:NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit fromDate:nextMonth];
+ //   NSDate *nextMonthDay = [gregorian dateFromComponents:nextMonthComponents];
+    
+    [gregorian release];
+    
+   //	NSLog(@"appointmentDate %@",AppointmentDate);
+    NSString *localDate = [NSDateFormatter localizedStringFromDate:nextMonth dateStyle:NSDateFormatterLongStyle timeStyle:NSDateFormatterMediumStyle];
+  //  NSLog(@"DATE--> %@",localDate);
+    
+      dateLabel.text = localDate;
     
     if ([[[UIDevice currentDevice] systemVersion] floatValue] < 7.0 && !IS_IPAD) {
         sfondo.frame=CGRectMake(0, 0, 320, 83);
