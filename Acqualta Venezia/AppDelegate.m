@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "ViewController.h"
 #import "RootViewController_s.h"
+#import "shopPoint.h"
 #define kHostName @"www.apple.com"
 
 @implementation AppDelegate
@@ -162,6 +163,46 @@
         [UIApplication sharedApplication].applicationIconBadgeNumber=0;
         
         self.window.hidden=NO;
+        
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+   
+        
+        NSURL *dataUrl = [NSURL
+                          URLWithString:@"http://www.imatera.info/Acqualta/link.txt"];
+        NSString *fileString = [NSString stringWithContentsOfURL:dataUrl
+                                                        encoding:NSUTF8StringEncoding
+                                                           error:nil];
+        int count = 0;
+        NSScanner *scanner = [NSScanner scannerWithString:fileString];
+        
+        shopPoints = [[NSMutableArray array] retain];
+        
+        
+        NSString *line;
+        NSArray *values;
+        
+        while ([scanner isAtEnd] == NO) {
+            [scanner scanUpToString:@"\n" intoString:&line];
+            //if(count > -1) {
+            values = [line componentsSeparatedByString:@"#"];
+            
+         
+            
+            [prefs setObject:[[values objectAtIndex:0] copy] forKey:@"api"];
+              [prefs setObject:[[values objectAtIndex:1] copy] forKey:@"apimappa"];
+            [prefs setObject:[[values objectAtIndex:2] copy] forKey:@"apilivelli"];
+          
+            NSLog(@"api link %@ %@ %@",[prefs objectForKey:@"api"],[prefs objectForKey:@"apilivelli"],[prefs objectForKey:@"apimappa"]);
+            //	}
+            count++;
+            if(count == 100) {
+                //limit number of events to 100
+                break;
+            }
+        }
+        
+
     }
 }
 
@@ -264,12 +305,12 @@
 	// Build URL String for Registration
 	// !!! CHANGE "www.mywebsite.com" TO YOUR WEBSITE. Leave out the http://
 	// !!! SAMPLE: "secure.awesomeapp.com"
-	NSString *host = @"www.PINCOPALLO.com";
+	NSString *host = @"www.apposta.biz";
 	
 	// !!! CHANGE "/apns.php?" TO THE PATH TO WHERE apns.php IS INSTALLED
 	// !!! ( MUST START WITH / AND END WITH ? ).
 	// !!! SAMPLE: "/path/to/apns.php?"
-	NSString *urlString = [NSString stringWithFormat:@"/apn.php?task=%@&appname=%@&appversion=%@&deviceuid=%@&devicetoken=%@&devicename=%@&devicemodel=%@&deviceversion=%@&pushbadge=%@&pushalert=%@&pushsound=%@", @"register", appName,appVersion, deviceUuid, deviceToken, deviceName, deviceModel, deviceSystemVersion, pushBadge, pushAlert, pushSound];
+	NSString *urlString = [NSString stringWithFormat:@"/apnacqualta.php?task=%@&appname=%@&appversion=%@&deviceuid=%@&devicetoken=%@&devicename=%@&devicemodel=%@&deviceversion=%@&pushbadge=%@&pushalert=%@&pushsound=%@", @"register", appName,appVersion, deviceUuid, deviceToken, deviceName, deviceModel, deviceSystemVersion, pushBadge, pushAlert, pushSound];
 	
 	// Register the Device Data
 	// !!! CHANGE "http" TO "https" IF YOU ARE USING HTTPS PROTOCOL

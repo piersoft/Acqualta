@@ -939,17 +939,17 @@
     image=[image stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     image =[image stringByReplacingOccurrencesOfString:@"%0A" withString:@""];
    
-    UIImageView *background1;
+    
     UIImage *cellBackground1 = [UIImage imageNamed:@"cropped-acqualtaVE_120.png"] ;
     if ([self.title isEqualToString:@"Livelli"]) {
-        cellBackground1= [UIImage imageNamed:@""] ;
+        cellBackground1= nil ;
     }
-    background1 = [[UIImageView alloc] initWithImage:cellBackground1];
+    UIImageView *background1 = [[UIImageView alloc] initWithImage:cellBackground1];
     
     UIImageView *imgview = (UIImageView *)[cell viewWithTag:10];
     CGRect frame= imgview.frame;
     
-    
+  
     
    
     if ((minThreshold >=-50) && (minThreshold <=79)) {
@@ -1023,9 +1023,10 @@
                         //  cellBackground1 = [UIImage imageNamed:@"mp-ico-72px.png"] ;
            
             
-            background1.frame = frame;
+            //background1.frame = frame;
             //  background1.contentMode = UIViewContentModeScaleAspectFill;
-            CALayer * l1 = [background1 layer];
+            imgview.image=cellBackground1;
+            CALayer * l1 = [imgview layer];
             [l1 setMasksToBounds:YES];
             [l1 setCornerRadius:5.0];
             // You can even add a border
@@ -1035,7 +1036,7 @@
             
           
             
-            [cell.contentView addSubview:background1];
+          //  [cell.contentView addSubview:background1];
         
      
         }else{

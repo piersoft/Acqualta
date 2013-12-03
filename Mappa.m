@@ -660,7 +660,7 @@
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     [self performSelector:@selector(timeout:) withObject:nil afterDelay:45];
     
-    mytimer = [NSTimer scheduledTimerWithTimeInterval:0.6 target:self selector:@selector(inizio) userInfo:nil repeats:NO];
+    mytimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(inizio) userInfo:nil repeats:NO];
     
     
     
@@ -1009,7 +1009,9 @@
     [mapView release];
     
     [self dismissViewControllerAnimated:YES completion:nil];
-    
+    if ([[prefs objectForKey:@"api"] isEqualToString:@"0"]) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
   //  [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -1104,7 +1106,7 @@
         check=[check stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         NSString *subtitle=[[elencoFeed objectAtIndex:0] objectForKey:@"category"];
         subtitle=[subtitle stringByReplacingOccurrencesOfRegex:@"\n" withString:@""];
-        subtitle=[NSString stringWithFormat:@"Ultimo livello: %@",subtitle];
+        subtitle=[NSString stringWithFormat:@"Ultimo livello: %@ cm.",subtitle];
         NSString *image =[[elencoFeed objectAtIndex:0] objectForKey:@"image"];
         
         image=[image stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];

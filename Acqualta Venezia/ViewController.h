@@ -16,4 +16,6 @@
     IBOutlet UIImageView *sfondo;
 }
 
+-(IBAction)about;
 @end
+

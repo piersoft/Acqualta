@@ -15,6 +15,7 @@
     UIImageView *splashView;
     NetworkStatus internetConnectionStatus;
     NetworkStatus remoteHostStatus;
+    NSMutableArray *shopPoints;
 }
 
 @property (strong, nonatomic) UIWindow *window;

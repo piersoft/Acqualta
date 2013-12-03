@@ -135,8 +135,13 @@
    
 }
 -(void)livelliapri{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    NSString *livelli=[NSString stringWithFormat:@"%@?limit=10",[prefs objectForKey:@"apilivelli"]];
+    
+    
     NSData *data = [[NSData alloc] initWithContentsOfURL:
-                    [NSURL URLWithString:@"http://paolomainardi.com:3050/api/data?limit=10"]];
+                    [NSURL URLWithString:livelli]];
     NSError *jsonError = nil;
     NSJSONSerialization *jsonResponse = [NSJSONSerialization
                                          JSONObjectWithData:data
@@ -155,14 +160,17 @@
 }
 -(IBAction)livelli{
     
-    [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(livelliapri) userInfo:nil repeats:NO];
-
-  
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    if ([[prefs objectForKey:@"api"] isEqualToString:@"0"]) {
+        [NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(livelli2) userInfo:nil repeats:NO];
+        [prefs setObject:nil forKey:@"scheda"];
+    }else [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(livelliapri) userInfo:nil repeats:NO];
  
 
 }
 
--(IBAction)livelli2{
+-(void)livelli2{
     NSString *nib=@"RootViewController2_s";
     
     RootViewController_s *photoView = [[RootViewController_s alloc] initWithNibName:nib bundle:nil];
@@ -223,8 +231,13 @@
 
 -(void)mappapri{
     
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    
+    
     NSData *data = [[NSData alloc] initWithContentsOfURL:
-                    [NSURL URLWithString:@"http://paolomainardi.com:3050/api/devices/"]];
+                    [NSURL URLWithString:[prefs objectForKey:@"apimappa"]]];
     NSError *jsonError = nil;
     NSJSONSerialization *jsonResponse = [NSJSONSerialization
                                          JSONObjectWithData:data
@@ -246,11 +259,16 @@
 }
 -(IBAction)mappa{
     
-    [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(mappapri) userInfo:nil repeats:NO];
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    if ([[prefs objectForKey:@"api"] isEqualToString:@"0"]) {
+          [NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(mappa_old) userInfo:nil repeats:NO];
+        [prefs setObject:nil forKey:@"scheda"];
+    }else [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(mappapri) userInfo:nil repeats:NO];
 
     
 }
--(IBAction)mappa_old{
+-(void)mappa_old{
     
     Mappa *photoView = [[Mappa alloc] initWithNibName:@"Mappa" bundle:nil];
     photoView.feed=@"http://www.imatera.info/Acqualta/acqualta.xml";
@@ -258,7 +276,7 @@
     [self.navigationController pushViewController:photoView animated:YES];
     [photoView release];
 }
--(IBAction)website{
+-(IBAction)credits{
     self.navigationController.navigationBarHidden=NO;
     
     if (IS_IPAD)
@@ -266,31 +284,31 @@
         
         ViewArticolo *controller = [[ViewArticolo alloc] initWithNibName:@"Articoloipad" bundle:nil];
         
-        controller.indirizzo = @"http://www.acqualta.org/il-sensore";
+        controller.indirizzo = @"http://www.imatera.info/Acqualta/creditsiphone.html";
         
         
-        controller.titolotext=@"Il sensore";
+        controller.titolotext=@"Credits";
         
-        //  controller.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+          controller.modalTransitionStyle = UIModalTransitionStylePartialCurl;
         
         
         [self.navigationController pushViewController:controller animated:YES];
         [controller release];
         
-        // [self presentViewController:controller animated:YES completion:nil];
+       //  [self presentViewController:controller animated:YES completion:nil];
         
     }else{
         
         ViewArticolo *controller = [[ViewArticolo alloc] initWithNibName:@"Articoloiphone" bundle:nil];
         
-        controller.indirizzo = @"http://www.acqualta.org/il-sensore";
+        controller.indirizzo = @"http://www.imatera.info/Acqualta/creditsiphone.html";
         
         
-        controller.titolotext=@"Il sensore";
+        controller.titolotext=@"Credits";
         
         //  controller.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
         
-        
+    //     [self presentViewController:controller animated:YES completion:nil];
         [self.navigationController pushViewController:controller animated:YES];
         [controller release];
     
@@ -298,7 +316,7 @@
 
 }
 
--(IBAction)credits{
+-(IBAction)about{
     
   //  self.navigationController.navigationBarHidden=NO;
   
