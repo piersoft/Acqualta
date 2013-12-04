@@ -137,11 +137,25 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
    
-  
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    NSString *livelli=[NSString stringWithFormat:@"%@?limit=10",[prefs objectForKey:@"apilivelli"]];
+    
+    
+    NSData *data = [[NSData alloc] initWithContentsOfURL:
+                    [NSURL URLWithString:livelli]];
+    NSError *jsonError = nil;
+    NSJSONSerialization *jsonResponse = [NSJSONSerialization
+                                         JSONObjectWithData:data
+                                         options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves
+                                         error:&jsonError];
+    
+    self.tracks= (NSDictionary *)jsonResponse ;
    titolo.text=self.title;
  
     par=0;
     
+    [UIApplication sharedApplication].applicationIconBadgeNumber=0;
     
     [[FavoritesData sharedFavoritesData] getFavorites];
 
@@ -352,73 +366,41 @@
 	
    
     NSString *link = item1[@"date_sent"];
-    /*
-	link = [link stringByReplacingOccurrencesOfString:@"PDT" withString:@""];
-	link = [link stringByReplacingOccurrencesOfString:@"GMT" withString:@""];
-	link = [link stringByReplacingOccurrencesOfString:@"+0000" withString:@""];
-	link = [link stringByReplacingOccurrencesOfString:@"Wed" withString:@"Mercoledì"];
-	link = [link stringByReplacingOccurrencesOfString:@"Sun" withString:@"Domenica"];
-	link = [link stringByReplacingOccurrencesOfString:@"Sat" withString:@"Sabato"];
-	link = [link stringByReplacingOccurrencesOfString:@"Fri" withString:@"Venerdì"];
-	link = [link stringByReplacingOccurrencesOfString:@"Mon" withString:@"Lunedì"];
-	link = [link stringByReplacingOccurrencesOfString:@"Tue" withString:@"Martedì"];
-	link = [link stringByReplacingOccurrencesOfString:@"Thu" withString:@"Giovedì"];
-	link = [link stringByReplacingOccurrencesOfString:@"Jan" withString:@"Gennaio"];
-	link = [link stringByReplacingOccurrencesOfString:@"Feb" withString:@"Febbario"];
-	link = [link stringByReplacingOccurrencesOfString:@"March" withString:@"Marzo"];
-	link = [link stringByReplacingOccurrencesOfString:@"Apr" withString:@"Aprile"];
-	link = [link stringByReplacingOccurrencesOfString:@"May" withString:@"Maggio"];
-	link = [link stringByReplacingOccurrencesOfString:@"Jun" withString:@"Giugno"];
-	link = [link stringByReplacingOccurrencesOfString:@"Jul" withString:@"Luglio"];
-	link = [link stringByReplacingOccurrencesOfString:@"Aug" withString:@"Agosto"];
-	link = [link stringByReplacingOccurrencesOfString:@"Sep" withString:@"Settembre"];
-	link = [link stringByReplacingOccurrencesOfString:@"Oct" withString:@"Ottobre"];
-	link = [link stringByReplacingOccurrencesOfString:@"Nov" withString:@"Novembre"];
-	link = [link stringByReplacingOccurrencesOfString:@"Dec" withString:@"Dicembre"];
-     */
-    link = [link stringByReplacingOccurrencesOfString:@"T" withString:@" "];
-    link = [link stringByReplacingOccurrencesOfString:@"Z" withString:@"GMT-00:00"];
+   
+    link = [link stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    [link stripHtml];
+    
+    
+  //  link=[link stringByReplacingOccurrencesOfString:@"T" withString:@" "];
+  //  link = [link stringByReplacingOccurrencesOfString:@"Z" withString:@""];
     link = [link stringByReplacingOccurrencesOfString:@".000" withString:@""];
     UILabel *dateLabel = (UILabel *)[cell viewWithTag:3];
     
    
   
- //   NSLog(@"date orig %@",link);
-    NSString *date = link;
-
+    NSLog(@"date orig %@",link);
+ 
+    
     NSDateFormatter *dateFormatter1 = [[NSDateFormatter alloc] init];
-    [dateFormatter1 setDateFormat : @"YYYY-MM-DD' 'hh:mm:ssZZZZ"];
-  //  [dateFormatter1 setDateStyle:NSDateFormatterMediumStyle];
-    
-   //[dateFormatter1 setTimeZone:[NSTimeZone timeZoneWithName:@"Rome"]];
-    NSDate *AppointmentDate = [dateFormatter1 dateFromString:date];
-    NSLocale *locale = [NSLocale currentLocale];
-    [dateFormatter1 setLocale:locale];
-   // [dateFormatter1 setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:3600*2]];
-    
-    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    
-    NSDateComponents *components = [[NSDateComponents alloc] init];
-    components.month = -1;
-    components.year =1;
-    
-    NSDate *nextMonth = [gregorian dateByAddingComponents:components toDate:AppointmentDate options:0];
-    [components release];
-    
-    [gregorian release];
-    
-   //	NSLog(@"appointmentDate %@",AppointmentDate);
-    NSString *localDate = [NSDateFormatter localizedStringFromDate:nextMonth dateStyle:NSDateFormatterFullStyle timeStyle:NSDateFormatterMediumStyle];
-  //  NSString *dateString = [dateFormatter1 stringFromDate:AppointmentDate];
-  //  NSLog(@"Date: %@", dateString);
+    [dateFormatter1 setDateFormat : @"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+ //   [dateFormatter1 setDateStyle:NSDateFormatterFullStyle];
+  [dateFormatter1 setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
 
-localDate= [localDate stringByReplacingOccurrencesOfString:@"GMT+01:00" withString:@""];
-    localDate= [localDate stringByReplacingOccurrencesOfString:@"GMT+02:00" withString:@""];
-    localDate= [localDate stringByReplacingOccurrencesOfString:@"GMT+00:00" withString:@""];
+  //  NSDate *AppointmentDate = [dateFormatter1 dateFromString:link];
+ //   NSString *dateString=[dateFormatter1 stringFromDate:AppointmentDate];
     
-   // NSLog(@"DATE--> %@",localDate);
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"eeee, dd-MMM-yy HH:mm:ss"];
+    NSString *dateString = [formatter stringFromDate:[dateFormatter1 dateFromString:link]];
+  // NSString *dateString=[NSString stringWithFormat:@"%@",AppointmentDate];
+    dateString=[dateString stringByReplacingOccurrencesOfString:@"+0000" withString:@""];
+    NSLog(@"DATE--> %@",dateString);
     
-      dateLabel.text = localDate;
+    
+    dateLabel.text = dateString;
+    
+  
     
     if ([[[UIDevice currentDevice] systemVersion] floatValue] < 7.0 && !IS_IPAD) {
         sfondo.frame=CGRectMake(0, 0, 320, 83);
