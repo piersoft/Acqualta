@@ -721,7 +721,9 @@
         
         myAnnotation.title = [title
                               copy] ;
-        NSString *jsoni=[NSString stringWithFormat:@"http://paolomainardi.com:3050/api/data/%@?limit=1&offset=0",idsens];
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        NSString *livelli=[prefs objectForKey:@"apilivelli"];
+        NSString *jsoni=[NSString stringWithFormat:@"%@%@?limit=1&offset=0",livelli,idsens];
          NSLog(@"jsonio %@",jsoni);
         NSData *data = [[NSData alloc] initWithContentsOfURL:
                         [NSURL URLWithString:jsoni]];
@@ -734,16 +736,16 @@
        
         NSDictionary *jinc=(NSDictionary *)jsonResponse;
         NSArray *monday = jinc[@"data"];
-        NSLog(@"monday %@",monday);
+      //  NSLog(@"monday %@",monday);
         if (![monday count]) {
             myAnnotation.subtitle =[[NSString stringWithFormat:@"Ultimo livello: %@",@"non pervenuto"]
                                     copy];
         }else{
         NSDictionary *item1=[[NSDictionary alloc] initWithDictionary:[monday objectAtIndex:0]];
-        NSLog(@"item1 level %d",[item1[@"level"] intValue]);
+   //     NSLog(@"item1 level %d",[item1[@"level"] intValue]);
         int livello= [item1[@"level"] intValue];
         
-        myAnnotation.subtitle =[[NSString stringWithFormat:@"Ultimo livello: %d",livello]
+        myAnnotation.subtitle =[[NSString stringWithFormat:@"Ultimo livello: %d cm.",livello]
                                 copy];
         
         }

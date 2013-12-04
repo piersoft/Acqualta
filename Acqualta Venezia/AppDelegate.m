@@ -192,8 +192,8 @@
             [prefs setObject:[[values objectAtIndex:0] copy] forKey:@"api"];
               [prefs setObject:[[values objectAtIndex:1] copy] forKey:@"apimappa"];
             [prefs setObject:[[values objectAtIndex:2] copy] forKey:@"apilivelli"];
-          
-            NSLog(@"api link %@ %@ %@",[prefs objectForKey:@"api"],[prefs objectForKey:@"apilivelli"],[prefs objectForKey:@"apimappa"]);
+          [prefs setObject:[[values objectAtIndex:3] copy] forKey:@"xml"];
+            NSLog(@"api link %@ %@ %@ %@",[prefs objectForKey:@"api"],[prefs objectForKey:@"apilivelli"],[prefs objectForKey:@"apimappa"],[prefs objectForKey:@"xml"]);
             //	}
             count++;
             if(count == 100) {
