@@ -91,6 +91,11 @@
              banner.frame=CGRectMake(0, self.view.frame.size.height-70, 768,70);
 
          }
+         if (IS_IPAD && [[[UIDevice currentDevice] systemVersion] floatValue] < 7.0){
+             banner.image=[UIImage imageNamed:@"acqualtabanner.png"];
+             banner.frame=CGRectMake(0, self.view.frame.size.height-90, 768,70);
+             
+         }
          NSLog(@"banner");
          [self.view addSubview:banner];
          
@@ -269,9 +274,11 @@
     
 }
 -(void)mappa_old{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     Mappa *photoView = [[Mappa alloc] initWithNibName:@"Mappa" bundle:nil];
-    photoView.feed=@"http://www.imatera.info/Acqualta/acqualta.xml";
+ //   photoView.feed=@"http://www.imatera.info/Acqualta/acqualta.xml";
+    photoView.feed=[prefs objectForKey:@"xml"];
    // [self presentViewController:photoView animated:YES completion:nil];
     [self.navigationController pushViewController:photoView animated:YES];
     [photoView release];

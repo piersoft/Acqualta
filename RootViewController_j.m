@@ -104,7 +104,10 @@
     
     
     } else {
-       
+        if (IS_IPAD) {
+                  titolo.frame=CGRectMake(0, 32, 768, 20);
+        }
+  
     toolBar.tintColor=[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255 alpha:1];
      }
     
@@ -211,7 +214,11 @@
         succ.enabled=YES;
     }else prev.enabled=YES;
     NSString *aggiunta;
-    feeds=@"http://paolomainardi.com:3050/api/data?limit=10";
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    NSString *livelli=[prefs objectForKey:@"apilivelli"];
+    livelli=[NSString stringWithFormat:@"%@?limit=10",livelli];
+    feeds=livelli;
+    
   //  if ([titolo.text rangeOfString:@"News"].length != 0){
          aggiunta=@"&offset=";
         NSString *path = [NSString stringWithFormat:@"%@%@%i",feeds,aggiunta,start1];
@@ -369,39 +376,47 @@
 	link = [link stringByReplacingOccurrencesOfString:@"Nov" withString:@"Novembre"];
 	link = [link stringByReplacingOccurrencesOfString:@"Dec" withString:@"Dicembre"];
      */
-   // link = [link stringByReplacingOccurrencesOfString:@"T" withString:@" "];
-    link = [link stringByReplacingOccurrencesOfString:@"Z" withString:@""];
+    link = [link stringByReplacingOccurrencesOfString:@"T" withString:@" "];
+    link = [link stringByReplacingOccurrencesOfString:@"Z" withString:@"GMT-00:00"];
     link = [link stringByReplacingOccurrencesOfString:@".000" withString:@""];
     UILabel *dateLabel = (UILabel *)[cell viewWithTag:3];
     
    
   
-  //  NSLog(@"date orig %@",link);
+ //   NSLog(@"date orig %@",link);
     NSString *date = link;
-    
-    NSDateFormatter *dateFormatter1 = [[NSDateFormatter alloc] init];
-    [dateFormatter1 setDateFormat : @"YYYY-MM-DD'T'hh:mm:ss"];
 
-   [dateFormatter1 setTimeZone:[NSTimeZone timeZoneWithName:@"Rome"]];
+    NSDateFormatter *dateFormatter1 = [[NSDateFormatter alloc] init];
+    [dateFormatter1 setDateFormat : @"YYYY-MM-DD' 'hh:mm:ssZZZZ"];
+  //  [dateFormatter1 setDateStyle:NSDateFormatterMediumStyle];
+    
+   //[dateFormatter1 setTimeZone:[NSTimeZone timeZoneWithName:@"Rome"]];
     NSDate *AppointmentDate = [dateFormatter1 dateFromString:date];
+    NSLocale *locale = [NSLocale currentLocale];
+    [dateFormatter1 setLocale:locale];
    // [dateFormatter1 setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:3600*2]];
+    
     NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
     
     NSDateComponents *components = [[NSDateComponents alloc] init];
-    components.month = -2;
+    components.month = -1;
     components.year =1;
     
     NSDate *nextMonth = [gregorian dateByAddingComponents:components toDate:AppointmentDate options:0];
     [components release];
     
-  //  NSDateComponents *nextMonthComponents = [gregorian components:NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit fromDate:nextMonth];
- //   NSDate *nextMonthDay = [gregorian dateFromComponents:nextMonthComponents];
-    
     [gregorian release];
     
    //	NSLog(@"appointmentDate %@",AppointmentDate);
-    NSString *localDate = [NSDateFormatter localizedStringFromDate:nextMonth dateStyle:NSDateFormatterLongStyle timeStyle:NSDateFormatterMediumStyle];
-  //  NSLog(@"DATE--> %@",localDate);
+    NSString *localDate = [NSDateFormatter localizedStringFromDate:nextMonth dateStyle:NSDateFormatterFullStyle timeStyle:NSDateFormatterMediumStyle];
+  //  NSString *dateString = [dateFormatter1 stringFromDate:AppointmentDate];
+  //  NSLog(@"Date: %@", dateString);
+
+localDate= [localDate stringByReplacingOccurrencesOfString:@"GMT+01:00" withString:@""];
+    localDate= [localDate stringByReplacingOccurrencesOfString:@"GMT+02:00" withString:@""];
+    localDate= [localDate stringByReplacingOccurrencesOfString:@"GMT+00:00" withString:@""];
+    
+   // NSLog(@"DATE--> %@",localDate);
     
       dateLabel.text = localDate;
     
@@ -444,7 +459,7 @@
  
     
     
-   UIImage *cellBackground1 = [UIImage imageNamed:@""] ;
+   UIImage *cellBackground1 = nil ;
    
     UIImageView *imgview = (UIImageView *)[cell viewWithTag:10];
     

@@ -896,7 +896,7 @@
     
    // image1=[NSString stringWithFormat:@"%@ cm.",image1];
    
-    int minThreshold = [image1 intValue]+50;
+    int minThreshold = [image1 intValue]+0;
     float stringFloat = [image1 floatValue];
     double myDecimal = stringFloat - minThreshold;
     if(myDecimal < 0.50)
@@ -1007,7 +1007,7 @@
     
    
       // pv8.progress=stringFloat;
-    NSLog(@"stringfloat %f",stringFloat);
+ //   NSLog(@"stringfloat %f",stringFloat);
 //    }else{
         
        

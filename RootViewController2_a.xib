@@ -83,7 +83,7 @@
         </searchDisplayController>
     </objects>
     <resources>
-        <image name="Home iPhone 0.png" width="320" height="568"/>
+        <image name="Home iPhone 0.png" width="320" height="125"/>
         <image name="barrasfumatabianca.png" width="768" height="60"/>
     </resources>
 </document>

@@ -35,6 +35,7 @@
                 <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="hybrid" id="8">
                     <rect key="frame" x="-1" y="64" width="481" height="256"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
                     <connections>
                         <outlet property="delegate" destination="-1" id="17"/>
                     </connections>

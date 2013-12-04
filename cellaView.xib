@@ -26,6 +26,7 @@
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" adjustsFontSizeToFit="NO" id="11">
                         <rect key="frame" x="66" y="31" width="168" height="23"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <inset key="insetFor6xAndEarlier" minX="-10" minY="0.0" maxX="10" maxY="0.0"/>
                         <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="14"/>
                         <color key="textColor" red="0.80000007149999997" green="0.15294118230000001" blue="0.53725492949999998" alpha="1" colorSpace="deviceRGB"/>
                         <color key="highlightedColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -33,6 +34,7 @@
                     <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" text="Label" lineBreakMode="clip" numberOfLines="2" minimumFontSize="8" id="28">
                         <rect key="frame" x="68" y="54" width="200" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <inset key="insetFor6xAndEarlier" minX="-10" minY="0.0" maxX="10" maxY="0.0"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue-BoldItalic" family="Helvetica Neue" pointSize="11"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="highlightedColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -40,6 +42,7 @@
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="3" contentMode="left" text="" textAlignment="center" lineBreakMode="clip" minimumFontSize="8" id="jHm-9d-ZcM">
                         <rect key="frame" x="64" y="9" width="173" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <inset key="insetFor6xAndEarlier" minX="-10" minY="0.0" maxX="10" maxY="0.0"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="11"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="highlightedColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -47,6 +50,7 @@
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="11" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" id="6mO-d8-mFl">
                         <rect key="frame" x="229" y="21" width="67" height="42"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <inset key="insetFor6xAndEarlier" minX="-5" minY="0.0" maxX="5" maxY="0.0"/>
                         <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="14"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
@@ -54,6 +58,7 @@
                     <imageView userInteractionEnabled="NO" tag="10" contentMode="scaleToFill" id="ZTu-YY-Xt6">
                         <rect key="frame" x="3" y="13" width="57" height="57"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <inset key="insetFor6xAndEarlier" minX="-10" minY="0.0" maxX="10" maxY="0.0"/>
                     </imageView>
                 </subviews>
             </tableViewCellContentView>
