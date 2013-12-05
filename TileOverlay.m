@@ -124,7 +124,7 @@ static NSInteger zoomScaleToZoomLevel(MKZoomScale scale) {
     for (NSInteger x = minX; x < maxX; x++) {
         for (NSInteger y = minY; y < maxY; y++) {
             
-            NSString *tileKey = [[NSString alloc] initWithFormat:@"%d/%d/%d", z, x, y]; // was flippedY
+            NSString *tileKey = [[NSString alloc] initWithFormat:@"%ld/%d/%d", (long)z, x, y]; // was flippedY
             if (!tiles) {
                 tiles = [NSMutableArray array];
             }

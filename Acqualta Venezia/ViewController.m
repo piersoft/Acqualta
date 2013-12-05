@@ -28,8 +28,12 @@
     [prefs setObject:nil forKey:@"scheda"];
     
     if ([prefs objectForKey:@"news"]!=nil) {
+       
+        [prefs setObject:nil forKey:@"news"];
+        
         [self livelli];
     }
+   
     /*
     if (IS_IPAD) {
         int t=0;
@@ -140,26 +144,13 @@
    
 }
 -(void)livelliapri{
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
-    NSString *livelli=[NSString stringWithFormat:@"%@?limit=10",[prefs objectForKey:@"apilivelli"]];
-    
-    
-    NSData *data = [[NSData alloc] initWithContentsOfURL:
-                    [NSURL URLWithString:livelli]];
-    NSError *jsonError = nil;
-    NSJSONSerialization *jsonResponse = [NSJSONSerialization
-                                         JSONObjectWithData:data
-                                         options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves
-                                         error:&jsonError];
-    
-    
+  
     RootViewController_j *trackListVC;
     trackListVC = [[RootViewController_j alloc]
                    initWithNibName:@"RootViewController_j"
                    bundle:nil];
     trackListVC.title=@"Livelli";
-    trackListVC.tracks = (NSDictionary *)jsonResponse ;
+   // trackListVC.tracks = (NSDictionary *)jsonResponse ;
     [self presentViewController:trackListVC animated:YES completion:nil];
     
 }
@@ -236,7 +227,7 @@
 
 -(void)mappapri{
     
-    
+    /*
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     
@@ -248,14 +239,14 @@
                                          JSONObjectWithData:data
                                          options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves
                                          error:&jsonError];
-    
+    */
     //    [self performSelector:@selector(timeout:) withObject:nil afterDelay:0];
     
     MappaAPI *trackListVC;
     trackListVC = [[MappaAPI alloc]
                    initWithNibName:@"MappaAPI"
                    bundle:nil];
-    trackListVC.tracks = (NSDictionary *)jsonResponse ;
+   // trackListVC.tracks = (NSDictionary *)jsonResponse ;
     //  NSLog(@"tracks in viewcontroller %@",[trackListVC.tracks objectForKey:@"data"]);
     [self.navigationController pushViewController:trackListVC animated:YES];
     [trackListVC release];

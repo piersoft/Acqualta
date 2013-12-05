@@ -652,6 +652,7 @@
     [mapView setZoomEnabled:YES];
     [mapView setScrollEnabled:YES];
     
+    [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(inizioAPI) userInfo:nil repeats:NO];
     
     
     
@@ -660,46 +661,63 @@
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     [self performSelector:@selector(timeout:) withObject:nil afterDelay:45];
     
-    
+  
+}
 
-  //  tracks =[[NSDictionary alloc] init];
+-(void)inizioAPI{
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    
+    
+    NSData *data = [[NSData alloc] initWithContentsOfURL:
+                    [NSURL URLWithString:[prefs objectForKey:@"apimappa"]]];
+    NSError *jsonError = nil;
+    NSJSONSerialization *jsonResponse = [NSJSONSerialization
+                                         JSONObjectWithData:data
+                                         options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves
+                                         error:&jsonError];
+    
+   self.tracks = (NSDictionary *)jsonResponse ;
+   
+    //  tracks =[[NSDictionary alloc] init];
     shopPoints = [[NSMutableArray alloc] init];
 	shopPoint *myAnnotation;
     
-  //  NSLog(@"tracks %@",self.tracks);
+   // NSLog(@"tracks %@",self.tracks);
 	
     NSArray *monday = tracks[@"data"];
     for ( NSDictionary *jj in monday )
     {/*
+      
+      NSMutableArray* annotations=[[NSMutableArray alloc] init];
+      
+      CLLocationCoordinate2D theCoordinate1;
+      theCoordinate1.latitude = [jj[@"latitude"] floatValue];
+      
+      theCoordinate1.longitude = [jj[@"longitude"]floatValue];
+      
+      MyAnnotation* myAnnotation1=[[MyAnnotation alloc] init];
+      
+      myAnnotation1.coordinate=theCoordinate1;
+      myAnnotation1.title=jj[@"location"];
+      myAnnotation1.subtitle=jj[@"alias"];
+      */
         
-        NSMutableArray* annotations=[[NSMutableArray alloc] init];
-        
-        CLLocationCoordinate2D theCoordinate1;
-        theCoordinate1.latitude = [jj[@"latitude"] floatValue];
-
-        theCoordinate1.longitude = [jj[@"longitude"]floatValue];
-        
-        MyAnnotation* myAnnotation1=[[MyAnnotation alloc] init];
-        
-        myAnnotation1.coordinate=theCoordinate1;
-        myAnnotation1.title=jj[@"location"];
-        myAnnotation1.subtitle=jj[@"alias"];
-*/
-       
         
         NSString *title=jj[@"location"];
-
-   //     NSLog (@"location =%@",title);
+        
+        //     NSLog (@"location =%@",title);
         
         
         NSString *idsens =jj[@"id"];
-      //  idsens=[NSString stringWithFormat:@"ID: %@",idsens];
-  //     NSLog (@"alias =%@",idsens);
+        //  idsens=[NSString stringWithFormat:@"ID: %@",idsens];
+          //   NSLog (@"alias =%@",idsens);
         NSString *checklat=jj[@"latitude"];
-     //   NSLog (@"chcklat =%@",checklat);
+         //  NSLog (@"chcklat =%@",checklat);
         NSString *checklng=jj[@"longitude"];
-    //        NSLog (@"chcklnd =%@",checklng);
-      //  checklat=[checklat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+         //       NSLog (@"chcklnd =%@",checklng);
+        //  checklat=[checklat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         if ([checklng intValue] == 0) {
             if ([title isEqualToString:@"Ruga Due Pozzi"]){
                 checklat=@"45.44146";
@@ -710,7 +728,7 @@
                 checklng=@"12.32591";
             }
         }
-       
+        
         // if (checklat !=@"0") {
 		myAnnotation = [[[shopPoint alloc] init] autorelease];
         
@@ -724,7 +742,7 @@
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         NSString *livelli=[prefs objectForKey:@"apilivelli"];
         NSString *jsoni=[NSString stringWithFormat:@"%@%@?limit=1&offset=0",livelli,idsens];
-     //    NSLog(@"jsonio %@",jsoni);
+        //NSLog(@"jsonio %@",jsoni);
         NSData *data = [[NSData alloc] initWithContentsOfURL:
                         [NSURL URLWithString:jsoni]];
         NSError *jsonError = nil;
@@ -732,42 +750,77 @@
                                              JSONObjectWithData:data
                                              options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves
                                              error:&jsonError];
-
-       
+        
+        
         NSDictionary *jinc=(NSDictionary *)jsonResponse;
         NSArray *monday = jinc[@"data"];
-      //  NSLog(@"monday %@",monday);
+        NSLog(@"monday %@",monday);
         if (![monday count]) {
             myAnnotation.subtitle =[[NSString stringWithFormat:@"Ultimo livello: %@",@"non pervenuto"]
                                     copy];
         }else{
-        NSDictionary *item1=[[NSDictionary alloc] initWithDictionary:[monday objectAtIndex:0]];
-   //     NSLog(@"item1 level %d",[item1[@"level"] intValue]);
-        int livello= [item1[@"level"] intValue];
-        
-        myAnnotation.subtitle =[[NSString stringWithFormat:@"Ultimo livello: %d cm.",livello]
-                                copy];
-        
+            NSDictionary *item1=[[NSDictionary alloc] initWithDictionary:[monday objectAtIndex:0]];
+            //     NSLog(@"item1 level %d",[item1[@"level"] intValue]);
+            int livello= [item1[@"level"] intValue];
+            
+            NSString *link = item1[@"date_sent"];
+            
+            link = [link stringByReplacingOccurrencesOfString:@" " withString:@""];
+            
+            [link stripHtml];
+    
+            link = [link stringByReplacingOccurrencesOfString:@".000" withString:@""];
+            
+            NSDateFormatter *dateFormatter1 = [[NSDateFormatter alloc] init];
+            [dateFormatter1 setDateFormat : @"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+            //   [dateFormatter1 setDateStyle:NSDateFormatterFullStyle];
+            [dateFormatter1 setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+            
+         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter setDateFormat:@"eeee, dd-MMM-yy HH:mm:ss"];
+            NSString *dateString = [formatter stringFromDate:[dateFormatter1 dateFromString:link]];
+            // NSString *dateString=[NSString stringWithFormat:@"%@",AppointmentDate];
+            dateString=[dateString stringByReplacingOccurrencesOfString:@"+0000" withString:@""];
+            //  NSLog(@"DATE--> %@",dateString);
+            
+            
+            
+            NSDate *now = [NSDate date];
+           // NSLog(@"now: %@", now); //2012-04-25 07:00:30 +0000
+            
+            NSTimeInterval distanceBetweenDates = [now timeIntervalSinceDate:[dateFormatter1 dateFromString:link]];
+            double secondsInAnHour = 720;
+            NSInteger hoursBetweenDates = distanceBetweenDates / secondsInAnHour;
+            
+           // NSLog(@"hoursBetweenDates: %ld", (long)hoursBetweenDates);
+            
+            
+            if (hoursBetweenDates>=1) {
+                myAnnotation.subtitle =[[NSString stringWithFormat:@"Livello: non pervenuto ultimi 12 min."]
+                                        copy];
+            }else  myAnnotation.subtitle =[[NSString stringWithFormat:@"Livello: %d cm.",livello]
+                                           copy];
+            
+          
+            
         }
         
         [shopPoints addObject:myAnnotation];
-    //    NSLog(@"my annotation %@",shopPoints);
+        //    NSLog(@"my annotation %@",shopPoints);
         
         [mapView addAnnotations:shopPoints];
-
+        
+        
+        //  mytimer = [NSTimer scheduledTimerWithTimeInterval:0.6 target:self selector:@selector(inizio) userInfo:nil repeats:NO];
+        
+    }
     
-  //  mytimer = [NSTimer scheduledTimerWithTimeInterval:0.6 target:self selector:@selector(inizio) userInfo:nil repeats:NO];
     
-   }
     
-   
-    
-   //   NSLog(@"mapview annotations %@  ",mapView.annotations);
+    //   NSLog(@"mapview annotations %@  ",mapView.annotations);
     [self performSelector:@selector(timeout:) withObject:nil afterDelay:0];
-    mytimer = [NSTimer scheduledTimerWithTimeInterval:.5 target:self selector:@selector(zoom) userInfo:nil repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval:.5 target:self selector:@selector(zoom) userInfo:nil repeats:NO];
 }
-
-
 
 
 -(NSMutableArray *)decodePolyLine: (NSMutableString *)encoded {
@@ -1410,8 +1463,7 @@
 #ifdef DEBUGX
 	NSLog(@"%s %@", __FUNCTION__, NSStringFromCGRect(self.view.bounds));
 #endif
-    
-    
+   
     [super viewDidAppear:animated];
 }
 
